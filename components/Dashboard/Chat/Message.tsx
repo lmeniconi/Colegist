@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/useAuth"
-import { ChatMessage } from "@/models/Chat/type"
+import { ChatMessage } from "@/models/Chat/types"
 import { getAvatarSrc } from "@/models/User/utils"
 import { Avatar } from "@nextui-org/react"
 

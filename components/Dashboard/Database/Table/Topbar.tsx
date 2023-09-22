@@ -15,7 +15,7 @@ import {
 } from "@tabler/icons-react"
 import { DATABASE_TYPES_MAP } from "."
 import CreateEditDatabaseModal from "../CreateEdit"
-import { Database } from "@/models/Database/type"
+import { Database } from "@/models/Database/types"
 import { Paginated } from "@/types/Api"
 
 type Props = {

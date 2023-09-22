@@ -1,5 +1,5 @@
-import { Database } from "../Database/type"
-import { User } from "../User/type"
+import { Database } from "../Database/types"
+import { User } from "../User/types"
 
 export type Organization = {
   id: number

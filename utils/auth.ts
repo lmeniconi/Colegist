@@ -1,4 +1,4 @@
-import { User } from "../models/User/type"
+import { User } from "../models/User/types"
 
 export function isAdmin(user?: User) {
   if (!user) return false

@@ -1,4 +1,4 @@
-import { Organization } from "../Organization/type"
+import { Organization } from "../Organization/types"
 
 export type User = {
   id: number

@@ -1,4 +1,4 @@
-import { Database } from "@/models/Database/type"
+import { Database } from "@/models/Database/types"
 import { Paginated } from "@/types/Api"
 import { getTotalPages } from "@/utils/api"
 import { Pagination, Selection } from "@nextui-org/react"

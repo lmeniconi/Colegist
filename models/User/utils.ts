@@ -1,4 +1,4 @@
-import { User } from "./type"
+import { User } from "./types"
 
 export function getAvatarSrc(user?: User) {
   return (

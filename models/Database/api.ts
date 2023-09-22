@@ -5,7 +5,7 @@ import {
   useQueryListPaginatedOptions,
   useQueryListPaginatedQuery,
 } from "@/hooks/useQuery"
-import { Database } from "./type"
+import { Database } from "./types"
 import apiAxios from "@/utils/api"
 
 type useDatabasesFilters = {
@@ -21,7 +21,7 @@ export type usePaginatedDatabasesQuery = useQueryListPaginatedQuery &
 export function useDatabases(
   options?: useQueryListOptions & {
     query?: useDatabasesQuery
-  },
+  }
 ) {
   return useQueryList<Database>("/databases", options)
 }
@@ -29,7 +29,7 @@ export function useDatabases(
 export function usePaginatedDatabases(
   options: useQueryListPaginatedOptions & {
     query: usePaginatedDatabasesQuery
-  },
+  }
 ) {
   return useQueryListPaginated<Database>("/databases", options)
 }
@@ -38,7 +38,7 @@ export type CreateDatabase = Partial<Database> & {
   password?: string
 }
 export async function createDatabase(
-  database: CreateDatabase,
+  database: CreateDatabase
 ): Promise<Database> {
   try {
     const { data } = await apiAxios.post<Database>("/databases", database)

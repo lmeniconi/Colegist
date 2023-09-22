@@ -3,10 +3,10 @@ import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/router"
 import { AxiosError } from "axios"
 import { PageProps } from "../types/Props"
-import { User } from "../models/User/type"
 import { isAdmin as validateIsAdmin } from "../utils/auth"
 import apiAxios from "../utils/api"
 import FullScreenLoader from "../components/Shared/Loader/FullScreen"
+import { User } from "@/models/User/types"
 
 export type AuthContextType = {
   user?: User

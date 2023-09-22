@@ -1,7 +1,7 @@
 import {
   DATABASE_CONNECTION_TYPES,
   DatabaseConnectionType,
-} from "@/models/Database/type"
+} from "@/models/Database/types"
 import { generateOptions } from "@/utils/helpers"
 import { Key, useEffect, useState } from "react"
 import {

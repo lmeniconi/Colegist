@@ -3,10 +3,13 @@ import Sidebar from "./Sidebar"
 
 type Props = {
   children: ReactNode
-  // spacing?: SpacingValue
+  withoutPadding?: boolean
 }
 
-export default function LayoutDashboard({ children }: Props) {
+export default function LayoutDashboard({
+  children,
+  withoutPadding = false,
+}: Props) {
   // const router = useRouter()
   // const links: SpotlightAction[] = Links.map(
   //   (link) =>
@@ -23,7 +26,9 @@ export default function LayoutDashboard({ children }: Props) {
       <section className="w-2/12">
         <Sidebar />
       </section>
-      <main className="w-10/12 p-10">{children}</main>
+      <main className={`w-10/12 ${!withoutPadding ? "p-10" : ""}`}>
+        {children}
+      </main>
     </section>
   )
 

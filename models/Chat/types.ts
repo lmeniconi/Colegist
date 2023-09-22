@@ -1,4 +1,4 @@
-import { User } from "../User/type"
+import { User } from "../User/types"
 
 export type Chat = {
   id: string

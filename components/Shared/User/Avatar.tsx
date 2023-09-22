@@ -1,4 +1,4 @@
-import { User } from "@/models/User/type"
+import { User } from "@/models/User/types"
 import { getAvatarSrc } from "@/models/User/utils"
 import {
   AvatarProps,

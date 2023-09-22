@@ -25,7 +25,7 @@ import {
   usePaginatedDatabases,
   usePaginatedDatabasesQuery,
 } from "@/models/Database/api"
-import { Database } from "@/models/Database/type"
+import { Database } from "@/models/Database/types"
 
 export const DATABASE_TYPES_MAP: {
   [key in Database["type"]]: {
