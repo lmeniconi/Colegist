@@ -1,8 +1,7 @@
 import {
+  useQueryData,
   useQueryList,
   useQueryListOptions,
-  useQueryListPaginated,
-  useQueryListPaginatedOptions,
   useQueryListPaginatedQuery,
 } from "@/hooks/useQuery"
 import apiAxios from "@/utils/api"
@@ -22,28 +21,44 @@ export function useChats(
     query?: useDatabasesQuery
   }
 ) {
-  return useQueryList<Chat>(`${databaseId}/chats`, options)
+  return useQueryList<Chat>(`databases/${databaseId}/chats`, options)
 }
 
-export function usePaginatedDatabases(
+export function useChat(
   databaseId: string | number,
-  options: useQueryListPaginatedOptions & {
-    query: usePaginatedDatabasesQuery
-  }
+  chatId: string | number,
+  options?: useQueryListOptions
 ) {
-  return useQueryListPaginated<Chat>(`${databaseId}/chats`, options)
+  return useQueryData<Chat>(`databases/${databaseId}/chats/${chatId}`, options)
 }
 
 export type CreateChat = {
-  message: string
+  prompt: string
 }
 export async function createChat(
   databaseId: string | number,
   chat: CreateChat
 ): Promise<Chat> {
   try {
-    const { data } = await apiAxios.post<Chat>(`${databaseId}/chats`, chat)
+    const { data } = await apiAxios.post<Chat>(
+      `databases/${databaseId}/chats`,
+      chat
+    )
     return data
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function sendChatPrompt(
+  databaseId: string | number,
+  chatId: string | number,
+  prompt: string
+) {
+  try {
+    await apiAxios.put(`databases/${databaseId}/chats/${chatId}`, {
+      prompt,
+    })
   } catch (error) {
     throw error
   }

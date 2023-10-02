@@ -1,10 +1,14 @@
-import { User } from "../User/types"
+import { User } from "../../User/types"
+import { Database } from "../types"
 
 export type Chat = {
   id: string
   title: string | null
+  computedTitle: string
   description: string | null
   messages: ChatMessage[]
+  databaseId: number
+  database?: Database
   userId: number
   user?: User
   createdAt: string

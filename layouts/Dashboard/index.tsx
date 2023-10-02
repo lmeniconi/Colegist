@@ -26,7 +26,9 @@ export default function LayoutDashboard({
       <section className="w-2/12">
         <Sidebar />
       </section>
-      <main className={`w-10/12 ${!withoutPadding ? "p-10" : ""}`}>
+      <main
+        className={`w-10/12 container mx-auto ${withoutPadding ? "" : "p-10"}`}
+      >
         {children}
       </main>
     </section>

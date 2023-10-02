@@ -9,6 +9,7 @@ export default function PromptInput(props: Props) {
       placeholder="Todos los usuarios que su email sea @google.com"
       size="lg"
       endContent={<IconCornerDownLeft />}
+      {...props}
     />
   )
 }

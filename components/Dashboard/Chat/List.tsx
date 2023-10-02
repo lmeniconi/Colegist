@@ -1,18 +1,25 @@
-import { Chat } from "@/models/Chat/types"
-import { Button, Card, CardBody } from "@nextui-org/react"
+import { Chat } from "@/models/Database/Chat/types"
+import { getChatPath } from "@/models/Database/Chat/utils"
+import { Button } from "@nextui-org/react"
+import Link from "next/link"
 
 type Props = {
   chats: Chat[]
 }
 
 export default function ChatList({ chats }: Props) {
-  return chats.map((chat) => (
-    <li key={chat.id}>
-      <Card className="py-2">
-        <CardBody>
-          <p className="text-xl">{chat.title ?? "Sin titulo"}</p>
-        </CardBody>
-      </Card>
-    </li>
-  ))
+  return (
+    <div className="space-y-5">
+      {chats.map((chat) => (
+        <Button
+          key={chat.id}
+          as={Link}
+          href={getChatPath(chat.databaseId, chat.id)}
+          className="w-full py-6"
+        >
+          {chat.computedTitle}
+        </Button>
+      ))}
+    </div>
+  )
 }
