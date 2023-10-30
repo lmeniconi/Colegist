@@ -30,7 +30,6 @@ export default function Page() {
       const chat = await createChat(dId, {
         prompt,
       })
-
       router.push(getChatPath(chat.databaseId, chat.id))
     } catch (error) {
       console.error(error)
@@ -60,7 +59,7 @@ export default function Page() {
           />
         </form>
 
-        {chats && (
+        {Boolean(chats?.length) && chats && (
           <>
             <Divider />
             <ChatList chats={chats} />

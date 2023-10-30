@@ -7,7 +7,7 @@ type Props = InputProps & {
 }
 
 export default function PromptInput(props: Props) {
-  const { textAreaRef, ...textAreaProps } = props
+  const { textAreaRef, value, ...textAreaProps } = props
 
   const sendButton = useRef<HTMLButtonElement>(null)
 
@@ -33,13 +33,14 @@ export default function PromptInput(props: Props) {
         // @ts-ignore
         onKeyDown={handleKeyDown}
         {...textAreaProps}
+        value={value}
       />
 
       <div className="w-[3%]">
         <Button
           ref={sendButton}
           isIconOnly
-          color="success"
+          color={value?.length ? "success" : "default"}
           aria-label="Enviar"
           type="submit"
         >

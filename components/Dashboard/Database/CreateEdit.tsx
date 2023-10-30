@@ -57,6 +57,8 @@ export default function CreateEditDatabaseModal({
   async function submit(data: CreateDatabase) {
     try {
       await createDatabase(data)
+      reset()
+      onOpenChange()
     } finally {
     }
   }
@@ -64,7 +66,6 @@ export default function CreateEditDatabaseModal({
   useEffect(() => {
     if (isOpen) return
     reset()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   return (

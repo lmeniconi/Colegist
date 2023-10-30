@@ -129,23 +129,21 @@ export default function DatabaseTable({ className }: Props) {
         return <p>{formatDate(database.createdAt)}</p>
       case "actions":
         return (
-          <div className="relative flex justify-center items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <IconDotsVertical className="text-default-300" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem color="warning" startContent={<IconEdit />}>
-                  Editar
-                </DropdownItem>
-                <DropdownItem color="danger" startContent={<IconTrash />}>
-                  Borrar
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button isIconOnly size="sm" variant="light">
+                <IconDotsVertical className="text-default-300" />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem color="warning" startContent={<IconEdit />}>
+                Editar
+              </DropdownItem>
+              <DropdownItem color="danger" startContent={<IconTrash />}>
+                Borrar
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         )
       default:
         return cellValue

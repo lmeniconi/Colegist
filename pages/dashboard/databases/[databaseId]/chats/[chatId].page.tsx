@@ -1,24 +1,63 @@
 import LayoutDashboard from "@/layouts/Dashboard"
-import { sendChatPrompt, useChat } from "@/models/Database/Chat/api"
+import { useChat } from "@/models/Database/Chat/api"
 import { Button, Divider } from "@nextui-org/react"
 import { useRouter } from "next/router"
-import { FormEvent, ReactNode, useEffect, useRef, useState } from "react"
+import {
+  FormEvent,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import ChatMessage from "@/components/Dashboard/Chat/Message"
 import PromptInput from "./components/PromptInput"
 import Link from "next/link"
+import { io, Socket } from "socket.io-client"
+import { ChatMessage as ChatMessageT } from "@/models/Database/Chat/types"
+
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL as string
 
 export default function Page() {
   const router = useRouter()
   const databaseId = router.query.databaseId as string | undefined
   const chatId = router.query.chatId as string | undefined
 
-  const { data: chat, refetch: refetchChat } = useChat(
-    databaseId as string,
-    chatId as string,
-    {
-      enabled: Boolean(databaseId) && Boolean(chatId),
+  const [chatTitle, setChatTitle] = useState("")
+
+  const { data: chat } = useChat(databaseId as string, chatId as string, {
+    enabled: Boolean(databaseId) && Boolean(chatId),
+    refetchInterval: !chatTitle ? 2000 : false,
+  })
+
+  useEffect(() => {
+    if (!chat?.title) return
+    setChatTitle(chat.title)
+  }, [chat])
+
+  const [messages, setMessages] = useState<ChatMessageT[]>([])
+  useEffect(() => {
+    if (!chat || messages.length) return
+    setMessages(chat.messages)
+  }, [chat])
+
+  const socket = useRef<Socket | null>(null)
+  useEffect(() => {
+    if (!chat || socket.current) return
+
+    socket.current = io(NEXT_PUBLIC_API_URL)
+
+    socket.current.emit("chats:join", {
+      chatId,
+    })
+    socket.current.on("chats:new-message", (message: ChatMessageT) =>
+      setMessages((messages) => [...messages, message])
+    )
+
+    return () => {
+      socket.current?.disconnect()
     }
-  )
+  }, [chat])
 
   const [prompt, setPrompt] = useState("")
 
@@ -26,13 +65,11 @@ export default function Page() {
     e.preventDefault()
 
     if (!databaseId || !chatId || !prompt) return
-
-    try {
-      await sendChatPrompt(databaseId, chatId, prompt)
-      setPrompt("")
-      await refetchChat()
-    } finally {
-    }
+    socket.current?.emit("chats:send-message", {
+      message: prompt,
+      chatId,
+    })
+    setPrompt("")
   }
 
   const textArea = useRef<HTMLInputElement>(null)
@@ -40,15 +77,6 @@ export default function Page() {
     if (!textArea.current) return
     textArea.current.focus()
   }, [textArea])
-
-  useEffect(() => {
-    const events = new EventSource("http://localhost:3333/events")
-    events.onmessage = (event) => {
-      console.log(event.data)
-    }
-
-    return () => events.close()
-  }, [])
 
   return (
     <section className="h-screen p-10">
@@ -65,7 +93,7 @@ export default function Page() {
       </section>
 
       <section className="h-[80%] overflow-y-auto">
-        {chat?.messages.map((message, index) => (
+        {messages.map((message, index) => (
           <ChatMessage key={index} message={message} />
         ))}
       </section>
@@ -76,6 +104,7 @@ export default function Page() {
             textAreaRef={textArea}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
+            // disabled={!chat || messages[messages.length - 1]?.type === "user"}
           />
         </form>
       </section>
