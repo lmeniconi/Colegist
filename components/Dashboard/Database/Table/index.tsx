@@ -127,6 +127,12 @@ export default function DatabaseTable({ className }: Props) {
     onOpen: onOpenDeleteModal,
     onOpenChange: onOpenDeleteModalChange,
   } = useDisclosure()
+
+  useEffect(() => {
+    if (createEditModalIsOpen || deleteModalIsOpen) return
+    setSelectedDatabase(null)
+  }, [createEditModalIsOpen, deleteModalIsOpen])
+
   const [deleting, setDeleting] = useState<boolean>(false)
   async function deleteDatabase() {
     if (!selectedDatabase?.id) return

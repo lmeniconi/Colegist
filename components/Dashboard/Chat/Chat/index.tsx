@@ -83,7 +83,7 @@ export default function Chat() {
         <Divider />
       </section>
 
-      <section className="h-[85%] overflow-y-auto">
+      <section className="h-[82%] overflow-y-auto">
         {chat ? (
           <>
             {messages.map((message, index) => (
@@ -92,7 +92,7 @@ export default function Chat() {
           </>
         ) : (
           <div className="flex justify-center items-center h-full">
-            <div className="space-y-5">
+            <div className="animate-fade space-y-5">
               <div className="text-center">
                 <div className="flex justify-center">
                   <IconMessages size={120} />
@@ -111,8 +111,11 @@ export default function Chat() {
         )}
       </section>
 
-      <section className="h-[5%]">
-        <form onSubmit={submit} className="max-w-[50%] mx-auto">
+      <section className="h-[8%]">
+        <form
+          onSubmit={submit}
+          className="animate-fade animate-delay-200 max-w-[50%] mx-auto"
+        >
           <PromptInput
             textAreaRef={textArea}
             value={prompt}
