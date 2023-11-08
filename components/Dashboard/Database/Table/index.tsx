@@ -13,6 +13,7 @@ import {
   Chip,
   ButtonProps,
   Selection,
+  useDisclosure,
 } from "@nextui-org/react"
 import React, { Key, useCallback, useEffect, useState } from "react"
 import { IconDotsVertical, IconEdit, IconTrash } from "@tabler/icons-react"
@@ -22,10 +23,13 @@ import DatabaseTableBottombar from "./Bottombar"
 import DatabaseTableTopbar from "./Topbar"
 import useSearch from "@/hooks/useSearch"
 import {
+  deleteDatabase as apiDeleteDatabase,
   usePaginatedDatabases,
   usePaginatedDatabasesQuery,
 } from "@/models/Database/api"
 import { Database } from "@/models/Database/types"
+import CreateEditDatabaseModal from "../CreateEdit"
+import DeleteModal from "@/components/Shared/Modal/Delete"
 
 export const DATABASE_TYPES_MAP: {
   [key in Database["type"]]: {
@@ -108,6 +112,34 @@ export default function DatabaseTable({ className }: Props) {
 
   const [selected, setSelected] = useState<Selection>(new Set([]))
 
+  // Modal
+  const [selectedDatabase, setSelectedDatabase] = useState<Database | null>(
+    null
+  )
+  const {
+    isOpen: createEditModalIsOpen,
+    onOpen: onOpenCreateEditModal,
+    onOpenChange: onOpenCreateEditModalChange,
+  } = useDisclosure()
+
+  const {
+    isOpen: deleteModalIsOpen,
+    onOpen: onOpenDeleteModal,
+    onOpenChange: onOpenDeleteModalChange,
+  } = useDisclosure()
+  const [deleting, setDeleting] = useState<boolean>(false)
+  async function deleteDatabase() {
+    if (!selectedDatabase?.id) return
+
+    try {
+      setDeleting(true)
+      await apiDeleteDatabase(selectedDatabase.id)
+      onOpenDeleteModalChange()
+    } finally {
+      setDeleting(false)
+    }
+  }
+
   const renderCell = useCallback((database: Database, columnKey: Key) => {
     const cellValue = database[columnKey as keyof Database]
 
@@ -136,10 +168,24 @@ export default function DatabaseTable({ className }: Props) {
               </Button>
             </DropdownTrigger>
             <DropdownMenu>
-              <DropdownItem color="warning" startContent={<IconEdit />}>
+              <DropdownItem
+                color="warning"
+                startContent={<IconEdit />}
+                onClick={() => {
+                  setSelectedDatabase(database)
+                  onOpenCreateEditModal()
+                }}
+              >
                 Editar
               </DropdownItem>
-              <DropdownItem color="danger" startContent={<IconTrash />}>
+              <DropdownItem
+                color="danger"
+                startContent={<IconTrash />}
+                onClick={() => {
+                  setSelectedDatabase(database)
+                  onOpenDeleteModal()
+                }}
+              >
                 Borrar
               </DropdownItem>
             </DropdownMenu>
@@ -151,56 +197,71 @@ export default function DatabaseTable({ className }: Props) {
   }, [])
 
   return (
-    <Table
-      aria-label="Tabla de bases de datos"
-      isHeaderSticky
-      selectedKeys={selected}
-      selectionMode="multiple"
-      onSelectionChange={setSelected}
-      topContent={
-        <DatabaseTableTopbar
-          databases={databases}
-          search={search}
-          onSearchChange={setSearch}
-          type={type}
-          onChangeType={setType}
-        />
-      }
-      topContentPlacement="outside"
-      bottomContent={
-        <DatabaseTableBottombar
-          selectedKeys={selected}
-          databases={databases}
-          onChangePage={(page) => setQuery({ ...query, page })}
-        />
-      }
-      bottomContentPlacement="outside"
-      className={className}
-    >
-      <TableHeader columns={COLUMNS}>
-        {(column) => (
-          <TableColumn
-            key={column.id}
-            align={column.id === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody
-        items={databases?.data ?? []}
-        emptyContent="Ninguna base de datos encontrada"
-        isLoading={loadingDatabases}
+    <>
+      <Table
+        aria-label="Tabla de bases de datos"
+        isHeaderSticky
+        selectedKeys={selected}
+        // selectionMode="multiple"
+        onSelectionChange={setSelected}
+        topContent={
+          <DatabaseTableTopbar
+            databases={databases}
+            search={search}
+            onSearchChange={setSearch}
+            type={type}
+            onChangeType={setType}
+            onCreateNew={onOpenCreateEditModal}
+          />
+        }
+        topContentPlacement="outside"
+        bottomContent={
+          <DatabaseTableBottombar
+            selectedKeys={selected}
+            databases={databases}
+            onChangePage={(page) => setQuery({ ...query, page })}
+          />
+        }
+        bottomContentPlacement="outside"
+        className={className}
       >
-        {(database) => (
-          <TableRow>
-            {(columnKey) => (
-              <TableCell>{renderCell(database, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+        <TableHeader columns={COLUMNS}>
+          {(column) => (
+            <TableColumn
+              key={column.id}
+              align={column.id === "actions" ? "center" : "start"}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          items={databases?.data ?? []}
+          emptyContent="Ninguna base de datos encontrada"
+          isLoading={loadingDatabases}
+        >
+          {(database) => (
+            <TableRow>
+              {(columnKey) => (
+                <TableCell>{renderCell(database, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+
+      <CreateEditDatabaseModal
+        database={selectedDatabase}
+        isOpen={createEditModalIsOpen}
+        onOpenChange={onOpenCreateEditModalChange}
+      />
+      <DeleteModal
+        isOpen={deleteModalIsOpen}
+        onOpenChange={onOpenDeleteModalChange}
+        onConfirm={deleteDatabase}
+        loading={deleting}
+      />
+    </>
   )
 }

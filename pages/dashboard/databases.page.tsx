@@ -8,6 +8,7 @@ export default function Page() {
       <Title description="Conecta tus bases de datos o sube tu schema para poder hacer consultas">
         Bases de Datos
       </Title>
+
       <DatabaseTable />
     </FadeIn>
   )

@@ -9,10 +9,9 @@ export default function DatabaseSelector(props: Props) {
   return (
     <Select
       label="Selecciona una base de datos"
-      labelPlacement="outside"
       variant="bordered"
       className="max-w-xs"
-      size="lg"
+      size="md"
       {...props}
     >
       {databases?.map((database) => (

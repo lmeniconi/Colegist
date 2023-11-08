@@ -1,11 +1,11 @@
 import {
   DATABASE_CONNECTION_TYPES,
+  Database,
   DatabaseConnectionType,
 } from "@/models/Database/types"
 import { generateOptions } from "@/utils/helpers"
 import { Key, useEffect, useState } from "react"
 import {
-  Button,
   Input,
   Modal,
   ModalBody,
@@ -18,23 +18,28 @@ import {
   Tabs,
 } from "@nextui-org/react"
 import { Controller, useForm } from "react-hook-form"
-import { CreateDatabase, createDatabase } from "@/models/Database/api"
+import {
+  CreateDatabase,
+  createDatabase,
+  updateDatabase,
+} from "@/models/Database/api"
+import ModalActions from "@/components/Shared/Modal/Actions"
 
 const DATABASE_CONNECTION_TYPES_OPTIONS = generateOptions(
   Array.from(DATABASE_CONNECTION_TYPES)
 )
 
 type Props = {
+  database?: Database | null
   isOpen: boolean
   onOpenChange: () => void
 }
 
 export default function CreateEditDatabaseModal({
+  database,
   isOpen,
   onOpenChange,
 }: Props) {
-  const [selected, setSelected] = useState<Key>("connect")
-
   const { control, handleSubmit, setValue, reset, formState } =
     useForm<CreateDatabase>({
       defaultValues: {
@@ -49,22 +54,36 @@ export default function CreateEditDatabaseModal({
       },
     })
 
+  const [selected, setSelected] = useState<Key>("connect")
+
   function setDefaultConnectionValues(connection: DatabaseConnectionType) {
     if (connection === "mysql") setValue("port", 3306)
     else if (connection === "postgres") setValue("port", 5432)
   }
 
   async function submit(data: CreateDatabase) {
-    try {
-      await createDatabase(data)
-      reset()
-      onOpenChange()
-    } finally {
-    }
+    if (data.id) await updateDatabase(data.id, data)
+    else await createDatabase(data)
+
+    reset()
+    onOpenChange()
   }
 
   useEffect(() => {
-    if (isOpen) return
+    if (isOpen) {
+      if (database) {
+        setValue("id", database.id)
+        setValue("name", database.name)
+        setValue("type", database.type)
+        setValue("connection", database.connection)
+        setValue("host", database.host)
+        setValue("port", database.port)
+        setValue("user", database.user)
+        setValue("database", database.database)
+      }
+
+      return
+    }
     reset()
   }, [isOpen])
 
@@ -202,21 +221,10 @@ export default function CreateEditDatabaseModal({
             </ModalBody>
 
             <ModalFooter>
-              <Button
-                type="button"
-                color="danger"
-                variant="flat"
-                onPress={onClose}
-              >
-                Cerrar
-              </Button>
-              <Button
-                type="submit"
-                color="primary"
-                isLoading={formState.isSubmitting}
-              >
-                Crear
-              </Button>
+              <ModalActions
+                loading={formState.isSubmitting}
+                onClose={onClose}
+              />
             </ModalFooter>
           </form>
         )}

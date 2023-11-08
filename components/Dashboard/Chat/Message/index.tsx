@@ -16,7 +16,7 @@ export default function ChatMessage({ message }: Props) {
   return (
     <div
       className={`flex items-center py-10 px-5 space-x-5 ${
-        isBot ? "bg-transparent" : "bg-zinc-700"
+        isBot ? "bg-zinc-700" : "bg-transparent"
       }`}
     >
       <div className="w-12">

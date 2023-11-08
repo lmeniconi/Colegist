@@ -25,7 +25,7 @@ type Props = TabsProps
 
 export default function ModeSelector(props: Props) {
   return (
-    <Tabs aria-label="Options" color="primary" variant="bordered" {...props}>
+    <Tabs aria-label="Options" color="primary" variant="light" {...props}>
       {MODES.map((mode) => (
         <Tab
           key={mode.key}

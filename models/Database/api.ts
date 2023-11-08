@@ -37,12 +37,38 @@ export function usePaginatedDatabases(
 export type CreateDatabase = Partial<Database> & {
   password?: string
 }
+
 export async function createDatabase(
-  database: CreateDatabase
+  payload: CreateDatabase
 ): Promise<Database> {
   try {
-    const { data } = await apiAxios.post<Database>("/databases", database)
-    return data
+    const { data: database } = await apiAxios.post<Database>(
+      "/databases",
+      payload
+    )
+    return database
+  } catch (error) {
+    // showErrorMessage(error)
+    throw error
+  }
+}
+
+export async function updateDatabase(id: number, payload: CreateDatabase) {
+  try {
+    const { data: database } = await apiAxios.put<Database>(
+      `/databases/${id}`,
+      payload
+    )
+    return database
+  } catch (error) {
+    // showErrorMessage(error)
+    throw error
+  }
+}
+
+export async function deleteDatabase(id: number) {
+  try {
+    await apiAxios.delete(`/databases/${id}`)
   } catch (error) {
     // showErrorMessage(error)
     throw error

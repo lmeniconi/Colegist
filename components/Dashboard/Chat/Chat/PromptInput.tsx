@@ -4,10 +4,11 @@ import { useRef } from "react"
 
 type Props = InputProps & {
   textAreaRef?: React.MutableRefObject<HTMLInputElement | null>
+  wrapperClassName?: string
 }
 
 export default function PromptInput(props: Props) {
-  const { textAreaRef, value, ...textAreaProps } = props
+  const { textAreaRef, value, wrapperClassName, ...textAreaProps } = props
 
   const sendButton = useRef<HTMLButtonElement>(null)
 
@@ -19,14 +20,16 @@ export default function PromptInput(props: Props) {
   }
 
   return (
-    <div className="flex justify-between items-center rounded-lg border px-2 py-0.5">
+    <div
+      className={`flex justify-between items-center rounded-xl border border-gray-500  px-2 py-0.5 ${wrapperClassName}`}
+    >
       <Textarea
         ref={textAreaRef}
         placeholder="Escribe tu pregunta"
         radius="none"
         minRows={1}
-        maxRows={3}
-        className="w-[97%] pr-5"
+        maxRows={2}
+        className="w-[90%]"
         classNames={{
           inputWrapper: "bg-transparent",
         }}
@@ -36,11 +39,11 @@ export default function PromptInput(props: Props) {
         value={value}
       />
 
-      <div className="w-[3%]">
+      <div className="w-[10%] flex justify-center">
         <Button
           ref={sendButton}
           isIconOnly
-          color={value?.length ? "success" : "default"}
+          color={value?.length ? "primary" : "default"}
           aria-label="Enviar"
           type="submit"
         >

@@ -21,7 +21,7 @@ export default function Logo() {
           gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#7000FF" />
-          <stop offset="1" stopColor="#D71919" stopColor="0.8" />
+          <stop offset="1" stopColor="#D71919" />
         </linearGradient>
       </defs>
     </svg>
