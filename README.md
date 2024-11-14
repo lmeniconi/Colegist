@@ -1,24 +1,18 @@
-# Next.js & NextUI Template
+# Overview
 
-This is a template for creating applications using Next.js 13 (pages directory) and NextUI (v2).
+Colegist is a self-hostable platform that turns Natural Language imputs into SQL with No SQL knowledge required.
 
-## Technologies Used
+## features
+- Platform to query, insert data, and work collaboratively.
+- multiple databases (MySQL, PostgreSQL, SQL Server, etc.) and adapts to each database's structure and relationships.
 
-- [Next.js 13](https://nextjs.org/docs/getting-started)
-- [NextUI](https://nextui.org)
-- [Tailwind CSS](https://tailwindcss.com)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org)
-- [Framer Motion](https://www.framer.com/motion)
-- [next-themes](https://github.com/pacocoursey/next-themes)
+## use cases
+- Speeding the querying for developers.
+- Query databases, insert data, and share insights collaboratively within teams.
 
-## How to Use
+## 🚀 Getting Started
 
-To create a new project based on this template using `create-next-app`, run the following command:
+To deploy Colegist on your server, simply run:
 
 ```bash
-npx create-next-app -e https://github.com/nextui-org/next-pages-template
-```
-## License
-
-Licensed under the [MIT license](https://github.com/nextui-org/next-pages-template/blob/main/LICENSE).
+curl -sSL https://colegist.com/install.sh | sh
