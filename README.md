@@ -9,10 +9,3 @@ Colegist is a self-hostable platform that turns Natural Language imputs into SQL
 ## use cases
 - Speeding the querying for developers.
 - Query databases, insert data, and share insights collaboratively within teams.
-
-## 🚀 Getting Started
-
-To deploy Colegist on your server, simply run:
-
-```bash
-curl -sSL https://colegist.com/install.sh | sh
